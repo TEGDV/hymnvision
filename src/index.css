@@ -1,10 +1,11 @@
 @import "tailwindcss";
 :root {
+  @apply bg-neutral-950;
   font-family: Roboto;
   color: #f6f6f6;
   font-weight: 400;
-  background-color: #2f2f2f;
   font-synthesis: none;
+  background-color: ;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -42,4 +43,23 @@
   font-display: block;
   font-family: "Tangerine-Bold";
   src: url("./assets/fonts/Tangerine/Tangerine-Bold.ttf");
+}
+
+.ctr {
+  @apply text-center flex items-center justify-center
+}
+
+.container-primary {
+  @apply shadow-sm border border-zinc-700 shadow-zinc-600 rounded-sm bg-zinc-900
+}
+.container-secondary {
+  @apply shadow-sm border border-zinc-800 shadow-zinc-700 rounded-sm bg-zinc-900
+}
+
+.sm-icon {
+  @apply w-4 h-4 text-gray-400 inline-block
+}
+
+.md-icon {
+  @apply w-6 h-6 text-gray-400 inline-block
 }
