@@ -1,7 +1,11 @@
-import {IconSong, IconMicrophone, IconPencil, IconInfo} from "./Icons.tsx"
+import {IconSong, IconMicrophone, IconPencil, IconInfo} from "./Icons.tsx";
+import { invoke } from '@tauri-apps/api/core';
 function Card({active = false}) {
+  function test(){
+      invoke('create_song', {});
+  }
   return (
-    <div class="container-secondary grid grid-flow-col gap-2 max-h-[100px] grid-rows-4 grid-cols-[80px_200px] w-full box-border p-2" classList={{"opacity-100": active,
+    <div onClick={test} class="container-secondary grid grid-flow-col gap-2 max-h-[100px] grid-rows-4 grid-cols-[80px_200px] w-full box-border p-2" classList={{"opacity-100": active,
         "opacity-50": !active}}>
       <div class="row-span-4 w-100">
         <img class="h-full" src="/sampleSongImg.jpg"/>

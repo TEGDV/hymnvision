@@ -14,7 +14,7 @@ function App() {
     <div class="col-start-5 row-start-7 w-full col-span-4 text-center border rounded-lg border-white h-12 min-w-[120px] px-2 transition duration-300 hover:-translate-2 hover:bg-black hover:border-black"><A class="h-full w-full flex justify-center items-center border-solid" href="/new-presentation">New Presentation</A></div>
     <div class="col-start-5 row-start-8 w-full col-span-4 text-center border rounded-lg border-white h-12 min-w-[120px] px-2 transition duration-300 hover:-translate-2 hover:bg-black hover:border-black"><A class="h-full w-full flex justify-center items-center border-solid" href="/lyrics">Lyrics</A></div>
     <div class="col-start-5 row-start-9 w-full col-span-4 text-center border rounded-lg border-white h-12 min-w-[120px] px-2 transition duration-300 hover:-translate-2 hover:bg-black hover:border-black"><A class="h-full w-full flex justify-center items-center border-solid" href="/bible">Bible</A></div>
-    <div class="col-start-5 row-start-10 w-full col-span-4 text-center border rounded-lg border-white h-12 min-w-[120px] px-2 transition duration-300 hover:-translate-2 hover:bg-black hover:border-black"><A class="h-full w-full flex justify-center items-center border-solid" href="/configs">Configs</A></div>
+    <div class="col-start-5 row-start-10 w-full col-span-4 text-center border rounded-lg border-white h-12 min-w-[120px] px-2 transition duration-300 hover:-translate-2 hover:bg-black hover:border-black"><A class="h-full w-full flex justify-center items-center border-solid" href="/test">Configs</A></div>
   </section>
   );
 }
