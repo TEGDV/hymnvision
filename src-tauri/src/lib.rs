@@ -1,20 +1,23 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! This is the result!", name)
-}
+mod models;
 
+use models::queries::{create_song, query_all};
+use surrealdb::engine::local::RocksDb;
+
+use surrealdb::Surreal;
+
+#[tokio::main]
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+pub async fn run() {
+    let db = Surreal::new::<RocksDb>("db").await.unwrap();
+    // Select a specific namespace / database
+    db.use_ns("database")
+        .use_db("song_database")
+        .await
+        .expect("Error connecting to Song Database");
     tauri::Builder::default()
+        .manage(db)
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, add])
+        .invoke_handler(tauri::generate_handler![create_song, query_all])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-}
-#[tauri::command]
-fn add(num1: u8, num2: u8) -> u8 {
-    let result: u8 = num1 + num2;
-    println!("I was invoked from JavaScript! {}", &result);
-    result
 }
