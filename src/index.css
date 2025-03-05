@@ -55,10 +55,41 @@
   @apply shadow-sm border border-zinc-800 shadow-zinc-700 rounded-sm bg-zinc-900
 }
 
+
+.dropdown {
+  @apply bg-zinc-900 border-0 appearance-none
+}
+
+.container-neutral {
+  @apply shadow-lg border border-zinc-800 shadow-zinc-700 rounded-sm bg-neutral-950
+}
+
+.input-box {
+  @apply shadow-lg border border-zinc-800 shadow-zinc-700 rounded-sm bg-zinc-900
+}
+
+
 .sm-icon {
   @apply w-4 h-4 text-gray-400 inline-block
 }
 
 .md-icon {
   @apply w-6 h-6 text-gray-400 inline-block
+}
+
+
+@theme {
+  --animate-dropdown: dropdown 500ms linear;
+  @keyframes dropdown {
+    0% {
+      max-height: 1.5em;
+      opacity: 50;
+      overflow: hidden;
+    }
+    100% {
+      max-height: 500px;
+      overflow: auto;
+      opacity: 100;
+    }
+  }
 }
