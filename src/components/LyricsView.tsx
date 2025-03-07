@@ -5,11 +5,9 @@ import { invoke } from "@tauri-apps/api/core";
 function LyricsView() {
 
   return (
-    <main class="">
-      <div>
-        LyricsView
-      </div>
-    </main>
+    <div>
+      LyricsView
+    </div>
   );
 }
 

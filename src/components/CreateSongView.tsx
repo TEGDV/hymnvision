@@ -4,7 +4,7 @@ import type { Song, Section } from "../types";
 import {SongSectionType} from "../types";
 import LyricsSection from "./LyricsSection.tsx"
 import {IconPlus} from "./Icons";
-
+import { A} from "@solidjs/router";
 function CreateSong() {
   const [title, setTitle] = createSignal("");
   const [author, setAuthor] = createSignal("");
@@ -27,6 +27,7 @@ function CreateSong() {
       genre: genre(),
       original_tone: originalTone(),
       chord_patterns_id: chordPatternsId(),
+      full_text: "",
       lyrics: sections(),
     };
 
@@ -42,14 +43,12 @@ function CreateSong() {
     setSections((prev) => {
       const updatedSections = [...prev]; // ✅ Clone the array to avoid reference issues
       Object.assign(updatedSections[index], newData); // ✅ Mutate only the changed section
-      console.log(newData);
       return updatedSections; // ✅ Return the same array reference
     });
   };
 
   // Add a new section dynamically
   const addSection = () => {
-    console.log("Tuki");
     setSections([...sections(), {
       section_type: SongSectionType.VERSE,
       index: sections().length + 1,
@@ -83,8 +82,10 @@ function CreateSong() {
           <IconPlus className="md-icon hover:shadow-md hover:bg-white" />
         </div>
       </div>
-
-      <button class="container-neutral" onClick={createNewSong}>Save Song</button>
+      <button class="container-neutral w-[120px] col-span-2" onClick={createNewSong}>Save Song</button>
+      <div class="container-neutral">
+        <A class="h-full w-full ctr border-solid" href="/">Menu</A>
+      </div>
     </div>
   );
 }
