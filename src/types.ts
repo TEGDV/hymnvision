@@ -12,6 +12,7 @@ export interface Song {
   genre: string;
   chord_patterns_id: string;
   original_tone: string;
+  full_text: string;
   lyrics: Section[];
 }
 

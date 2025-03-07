@@ -4,10 +4,12 @@ use serde::{Deserialize, Serialize};
 pub struct Song {
     pub title: String,
     pub author: String,
-    pub album: String,
-    pub genre: String,
-    pub chord_patterns_id: String,
-    pub original_tone: String,
+    pub album: Option<String>,
+    pub genre: Option<String>,
+    pub chord_patterns_id: Option<String>,
+    pub original_tone: Option<String>,
+    #[serde(default)]
+    pub full_text: String,
     pub lyrics: Vec<Section>,
 }
 
