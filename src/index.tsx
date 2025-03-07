@@ -7,7 +7,7 @@ import NewPresentationView from "./components/NewPresentationView.tsx"
 import CreateSongView from "./components/CreateSongView.tsx"
 import BibleView from "./components/BibleView.tsx"
 import ConfigsView from "./components/ConfigsView.tsx"
-import CreateSong from "./components/Test.tsx"
+import ListComponent from "./components/ListComponent"
 import "./index.css"
 
 render(
@@ -17,7 +17,7 @@ render(
     <Route path={["/new-presentation"]} component={NewPresentationView}/>
     <Route path={["/bible"]} component={BibleView}/>
     <Route path={["/configs"]} component={ConfigsView}/>
-    <Route path={["/test"]} component={CreateSong}/>
+    <Route path={["/test"]} component={ListComponent}/>
   </Router>,
   document.getElementById("root")
 );
