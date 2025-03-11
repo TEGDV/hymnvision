@@ -1,39 +1,31 @@
-use crate::models::types::Song;
+use std::fmt::format;
+
+use crate::models::types::{Song, SongId};
 use surrealdb::engine::local::Db;
 use surrealdb::Surreal;
+use surrealdb::Uuid;
 use tauri::State;
 
 #[tauri::command]
-pub async fn create_song(db: State<'_, Surreal<Db>>, mut body: Song) -> surrealdb::Result<()> {
+pub async fn query_all(db: State<'_, Surreal<Db>>) -> surrealdb::Result<Vec<SongId>> {
     let db = db.inner();
-    let full_text = body
-        .lyrics
-        .iter()
-        .map(|section| section.lines.join("\n")) // Join lines within a section
-        .collect::<Vec<_>>() // Collect into a Vec<String>
-        .join(""); // Join sections with a double newline
-                   // Assign the generated text to the field
-    body.full_text = full_text;
-    let created: Option<Song> = db
-        .create("song")
-        .content(body)
+    let sql = "SELECT id, * FROM song;";
+    let mut query_response = db
+        .query(sql)
         .await
-        .expect("Error to create Entry on DB");
-    dbg!(created);
-    Ok(())
-}
-
-#[tauri::command]
-pub async fn query_all(db: State<'_, Surreal<Db>>) -> surrealdb::Result<Vec<Song>> {
-    let db = db.inner();
-    let entries: Vec<Song> = db
-        .select("song")
-        .await
-        .expect("Error to create Entry on DB");
-    dbg!(&entries);
+        .expect("Error retrieving all songs on DB");
+    let entries: Vec<SongId> = query_response.take(0).unwrap();
     Ok(entries)
 }
-
+#[tauri::command]
+pub async fn query_one(db: State<'_, Surreal<Db>>, id: String) -> surrealdb::Result<Song> {
+    let db = db.inner();
+    let song: Option<Song> = db
+        .select(("song", id))
+        .await
+        .expect("Error to create Entry on DB");
+    Ok(song.unwrap())
+}
 #[tauri::command]
 pub async fn search_song(
     db: State<'_, Surreal<Db>>,
@@ -51,7 +43,7 @@ pub async fn search_song(
         .collect::<Vec<String>>()
         .join(" OR ");
     let sql = format!(
-        "SELECT * FROM song WHERE {} ORDER BY title DESC;",
+        "SELECT id,* FROM song WHERE {} ORDER BY title DESC;",
         where_clause
     );
 
@@ -61,4 +53,46 @@ pub async fn search_song(
         .expect("Error during desirializing Song Search");
     dbg!(&entries);
     Ok(entries)
+}
+#[tauri::command]
+pub async fn update_song(
+    db: State<'_, Surreal<Db>>,
+    mut body: Song,
+    id: Uuid,
+) -> surrealdb::Result<()> {
+    let db = db.inner();
+    let full_text = body
+        .lyrics
+        .iter()
+        .map(|section| section.lines.join("\n")) // Join lines within a section
+        .collect::<Vec<_>>() // Collect into a Vec<String>
+        .join(""); // Join sections with a double newline
+                   // Assign the generated text to the field
+    body.full_text = full_text;
+    let _updated: Option<Song> = db
+        .update(("song", id.braced().to_string()))
+        .content(body)
+        .await
+        .expect("Error to create Entry on DB");
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn create_song(db: State<'_, Surreal<Db>>, mut body: Song) -> surrealdb::Result<()> {
+    let db = db.inner();
+    let new_id = Uuid::new_v4().to_string();
+    let full_text = body
+        .lyrics
+        .iter()
+        .map(|section| section.lines.join("\n"))
+        .collect::<Vec<_>>()
+        .join("");
+    body.full_text = full_text;
+    let _created: Option<Song> = db
+        .create(("song", new_id))
+        .content(body)
+        .await
+        .expect("Error to create Entry on DB");
+    dbg!(&_created);
+    Ok(())
 }

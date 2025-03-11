@@ -3,21 +3,21 @@ import { render } from "solid-js/web";
 import { Router, Route } from "@solidjs/router";
 import App from "./App.tsx"
 import LyricsView from "./components/LyricsView.tsx"
-import NewPresentationView from "./components/NewPresentationView.tsx"
-import CreateSongView from "./components/CreateSongView.tsx"
+import PresentationView from "./components/PresentationView.tsx"
+import SongDetailsView from "./components/SongDetailsView.tsx"
+import SongsView from "./components/SongsView"
 import BibleView from "./components/BibleView.tsx"
 import ConfigsView from "./components/ConfigsView.tsx"
-import ListComponent from "./components/ListComponent"
 import "./index.css"
 
 render(
   () => <Router>
-    <Route path={["/"]} component={App}/>
-    <Route path={["/new-song"]} component={CreateSongView}/>
-    <Route path={["/new-presentation"]} component={NewPresentationView}/>
-    <Route path={["/bible"]} component={BibleView}/>
-    <Route path={["/configs"]} component={ConfigsView}/>
-    <Route path={["/test"]} component={ListComponent}/>
+      <Route path="/" component={App} />
+      <Route path="/songs" component={SongsView} />
+      <Route path="/songs/:id" component={SongDetailsView} /> {/* ✅ Dynamic route for viewing a song */}
+      <Route path="/presentation" component={PresentationView} />
+      <Route path="/bible" component={BibleView} />
+      <Route path="/configs" component={ConfigsView} />
   </Router>,
   document.getElementById("root")
 );

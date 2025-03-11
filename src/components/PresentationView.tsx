@@ -1,10 +1,9 @@
 import Card from "./Card.tsx"
-import { invoke } from "@tauri-apps/api/core";
 
-function NewPresentationView() {
+function PresentationView() {
   return (
     <main class="grid gap-2 grid-cols-12 grid-rows-[32px_repeat(7,1fr)] h-full w-full p-2">
-        <div class="ctr" onClick={query_all}>Play Button</div>
+        <div class="ctr">Play Button</div>
         <div class="ctr">Open</div>
         <div class="ctr">Save</div>
         <div class="ctr">+ Media</div>
@@ -26,4 +25,4 @@ function NewPresentationView() {
   );
 }
 
-export default NewPresentationView;
+export default PresentationView;

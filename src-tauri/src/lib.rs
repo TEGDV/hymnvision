@@ -1,6 +1,6 @@
 mod models;
 
-use models::queries::{create_song, query_all, search_song};
+use models::queries::{create_song, query_all, query_one, search_song, update_song};
 use surrealdb::engine::local::RocksDb;
 
 use surrealdb::Surreal;
@@ -36,6 +36,8 @@ pub async fn run() {
         .invoke_handler(tauri::generate_handler![
             create_song,
             query_all,
+            query_one,
+            update_song,
             search_song
         ])
         .run(tauri::generate_context!())

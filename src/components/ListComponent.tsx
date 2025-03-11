@@ -3,7 +3,6 @@ import logo from "./assets/logo.svg";
 import { invoke } from "@tauri-apps/api/core";
 import {Song, Section} from "../types";
 import { createStore } from "solid-js/store";
-import { A} from "@solidjs/router";
 import {IconSearch} from "./Icons";
 
 
@@ -14,6 +13,7 @@ function ListComponent() {
   onMount(async () => {
     let songs: Song[] = [];
     await invoke("query_all", {}).then((entries) => {
+      console.log(entries);
       setSongEntries(entries)
     })
   });
@@ -22,6 +22,7 @@ function ListComponent() {
     // full text search function
     let search_string = event.target.value;
     if (search_string === "") {
+
       await invoke("query_all", {}).then((entries) => {
         setSongEntries(entries)
       })
@@ -32,33 +33,33 @@ function ListComponent() {
   };
 
   return (
-    <div class="container-primary grid grid-cols-12 auto-rows-[32px] gap-2">
-      <input onInput={search_song} class="w-full col-span-5" type="text" placeholder="Search"/><IconSearch className="md-icon m-2 col-span-1"/>
-        <div class="grid grid-cols-3 w-full col-span-6">
-            <span>title</span>
-            <span>author</span>
-            <span>album</span>
-        </div>
+    <div class="container-primary grid grid-cols-12 auto-rows-[24px] gap-1 min-w-[700px] max-h-[400px]">
+      <input onInput={search_song} class="w-full col-span-7 ctrl container-secondary" type="text" placeholder="Search"/>
+      <div class="ctr col-span-1 container-secondary"><IconSearch className="md-icon"/></div>
+      <div class="grid grid-cols-3 w-full col-span-8">
+          <span class="text-sm ctrl h-full w-full">Title</span>
+          <span class="text-sm ctrl h-full w-full">Author</span>
+          <span class="text-sm ctrl h-full w-full">Album</span>
+      </div>
 
+      <div class="grid grid-cols-3 auto-rows-[24px] gap-1 w-full row-span-10 col-span-8 overflow-scroll">
         <For each={songEntries}>
           {(song) => 
-            <div class="grid grid-cols-3 w-full col-span-6 bg-neutral-800 p-2" onMouseEnter={() => setPreviewLyrics(song.lyrics)}>
-                <span>{song.title}</span>
-                <span>{song.author}</span>
-                <span>{song.album}</span>
+            <div class="container-primary grid grid-cols-subgrid w-full col-span-8 max-h-[32px]" onMouseEnter={() => setPreviewLyrics(song.lyrics)}>
+                <p class="text-sm ctrl h-full w-full truncate overflow-hidden">{song.title}</p>
+                <span class="text-sm ctrl h-full w-full overflow-x-hidden">{song.author}</span>
+                <span class="text-sm ctrl h-full w-full overflow-x-hidden">{song.album}</span>
             </div>
           }
         </For>
-      <div class="border-1 bg-neutral col-span-6 row-span-12 col-start-7 row-start-1">
+      </div>
+      <div class="container-secondary col-span-4 row-span-12 col-start-9 row-start-1 overflow-scroll">
         <For each={previewLyrics()}>
-          {(section) => <p class="text-md m-4 whitespace-pre"><bold>{section.section_type}</bold><br/>{section.lines.join("\n")}</p>
+          {(section) => <p class="text-sm m-2 whitespace-pre"><b>{section.section_type}</b><br/>{section.lines.join("\n")}</p>
           }
         </For>
       </div>
 
-      <div class="container-neutral">
-        <A class="h-full w-full ctr border-solid" href="/">Menu</A>
-      </div>
     </div>
   );
 }

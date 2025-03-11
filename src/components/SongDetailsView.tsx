@@ -1,11 +1,26 @@
-import { createSignal } from "solid-js";
+import { createSignal, createResource, createEffect } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import type { Song, Section } from "../types";
 import {SongSectionType} from "../types";
 import LyricsSection from "./LyricsSection.tsx"
 import {IconPlus} from "./Icons";
-import { A} from "@solidjs/router";
-function CreateSong() {
+import { A, useParams, useNavigate} from "@solidjs/router";
+
+function fetchSongById(id: string) {
+  return invoke<Song>("query_one", { id }); // ✅ Correctly pass `id` as a parameter
+}
+
+function SongDetailsView() {
+  const params = useParams();
+  const navigate = useNavigate();
+  const isNew = () => params.id === "new";
+
+  console.log("New")
+  console.log(isNew())
+  console.log("params.id")
+  console.log(params.id)
+  // Signals
+  const [id, setId] = createSignal("");
   const [title, setTitle] = createSignal("");
   const [author, setAuthor] = createSignal("");
   const [album, setAlbum] = createSignal("");
@@ -19,23 +34,47 @@ function CreateSong() {
     chord_pattern: "default_chord_pattern"
   }]);
 
-  const createNewSong = async () => {
-    const song: Song = {
+  const [song] = createResource(() => (!isNew() ? params.id : null), fetchSongById);
+
+createEffect(() => {
+  const data = song();
+  if (data) {
+    setId(data.id);
+    setTitle(data.title);
+    setAuthor(data.author);
+    setAlbum(data.album);
+    setGenre(data.genre);
+    setChordPatternsId(data.chord_patterns_id);
+    setOriginalTone(data.original_tone);
+    setSections(data.lyrics);
+  }
+});
+
+// ✅ Handle Save (Create or Update)
+  const saveSong = async () => {
+    const songData: Song = {
       title: title(),
       author: author(),
       album: album(),
       genre: genre(),
-      original_tone: originalTone(),
       chord_patterns_id: chordPatternsId(),
-      full_text: "",
+      original_tone: originalTone(),
       lyrics: sections(),
     };
 
     try {
-      await invoke("create_song", { body: song });
-      alert("Song created successfully!");
+      if (isNew()) {
+        console.log("Created")
+        console.log(songData)
+        await invoke("create_song", { body: songData });
+      } else {
+        console.log("Updated")
+        console.log(songData)
+        await invoke("update_song", { body: songData, id: id() });
+      }
+      // navigate("/songs"); // ✅ Redirect after saving
     } catch (error) {
-      console.error("Error creating song:", error);
+      console.error("Error saving song:", error);
     }
   };
   // Update a specific section
@@ -60,7 +99,7 @@ function CreateSong() {
   return (
     <div class="grid gap-8 grid-cols-12 grid-rows-[repeat(12,1fr)] h-full w-full p-2">
       <div class="grid grid-cols-[120px_repeat(2,1fr)] gap-4 col-span-4 w-full">
-        <h2 class="ctr col-span-3 h-full">Create a Song</h2>
+        <h2 class="ctr col-span-3 h-full">Song Details</h2>
         <span class="p-4">Title: </span><input type="text" class="container-secondary col-span-2" placeholder="Title" onInput={(e) => setTitle(e.currentTarget.value)} />
         <span class="p-4">Author: </span><input type="text" class="container-secondary col-span-2" placeholder="Author" onInput={(e) => setAuthor(e.currentTarget.value)} />
         <span class="p-4">Album: </span><input type="text" class="container-secondary col-span-2" placeholder="Album" onInput={(e) => setAlbum(e.currentTarget.value)} />
@@ -82,7 +121,7 @@ function CreateSong() {
           <IconPlus className="md-icon hover:shadow-md hover:bg-white" />
         </div>
       </div>
-      <button class="container-neutral w-[120px] col-span-2" onClick={createNewSong}>Save Song</button>
+      <button class="container-neutral w-[120px] col-span-2" onClick={saveSong}>Save</button>
       <div class="container-neutral">
         <A class="h-full w-full ctr border-solid" href="/">Menu</A>
       </div>
@@ -90,4 +129,4 @@ function CreateSong() {
   );
 }
 
-export default CreateSong;
+export default SongDetailsView;
