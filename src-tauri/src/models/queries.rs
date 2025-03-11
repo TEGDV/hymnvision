@@ -1,15 +1,12 @@
-use std::fmt::format;
-
 use crate::models::types::{Song, SongId};
 use surrealdb::engine::local::Db;
 use surrealdb::Surreal;
-use surrealdb::Uuid;
 use tauri::State;
 
 #[tauri::command]
 pub async fn query_all(db: State<'_, Surreal<Db>>) -> surrealdb::Result<Vec<SongId>> {
-    let db = db.inner();
-    let sql = "SELECT id, * FROM song;";
+    let db: &Surreal<Db> = db.inner();
+    let sql: &str = "SELECT id, * FROM song;";
     let mut query_response = db
         .query(sql)
         .await
@@ -58,7 +55,7 @@ pub async fn search_song(
 pub async fn update_song(
     db: State<'_, Surreal<Db>>,
     mut body: Song,
-    id: Uuid,
+    id: String,
 ) -> surrealdb::Result<()> {
     let db = db.inner();
     let full_text = body
@@ -70,7 +67,7 @@ pub async fn update_song(
                    // Assign the generated text to the field
     body.full_text = full_text;
     let _updated: Option<Song> = db
-        .update(("song", id.braced().to_string()))
+        .update(("song", id))
         .content(body)
         .await
         .expect("Error to create Entry on DB");
@@ -80,7 +77,6 @@ pub async fn update_song(
 #[tauri::command]
 pub async fn create_song(db: State<'_, Surreal<Db>>, mut body: Song) -> surrealdb::Result<()> {
     let db = db.inner();
-    let new_id = Uuid::new_v4().to_string();
     let full_text = body
         .lyrics
         .iter()
@@ -89,10 +85,21 @@ pub async fn create_song(db: State<'_, Surreal<Db>>, mut body: Song) -> surreald
         .join("");
     body.full_text = full_text;
     let _created: Option<Song> = db
-        .create(("song", new_id))
+        .create("song")
         .content(body)
         .await
         .expect("Error to create Entry on DB");
     dbg!(&_created);
     Ok(())
+}
+
+#[tauri::command]
+pub async fn delete_song(db: State<'_, Surreal<Db>>, id: String) -> surrealdb::Result<Song> {
+    let db = db.inner();
+    println!("{}", &id);
+    let song: Option<Song> = db
+        .delete(("song", id))
+        .await
+        .expect("Error to create Entry on DB");
+    Ok(song.unwrap())
 }

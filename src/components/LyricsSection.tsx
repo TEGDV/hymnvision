@@ -84,7 +84,7 @@ function LyricsSection(props: { section: Section; onUpdate: (newData: Partial<Se
         placeholder="Lyrics"
         value={lyrics}
         onInput={handleChangeLyrics}
-      />
+      >{lyrics}</div>
 
     </>
   );
