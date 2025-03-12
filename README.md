@@ -3,9 +3,9 @@
 Preview
 ---
 
-![menu](./public/menu.jpg)
-![presentationView](./public/presentationView.jpg)
-![searchComponent](./public/searchAdd.jpg)
+![menu](public/menu.jpg)
+![presentationView](public/presentationView.jpg)
+![searchComponent](public/searchAdd.jpg)
 
 
 # Development notes
