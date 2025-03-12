@@ -9,10 +9,10 @@ import ConfirmModal from "./ConfirmationModal";
 import {A} from "@solidjs/router";
 
 function ListComponent() {
-  const [songEntries, setSongEntries] = createStore<Song[]>([]);
-  const [previewLyrics, setPreviewLyrics] = createSignal<Section[]>([]);
   const [showModal, setShowModal] = createSignal(false);
+  const [songEntries, setSongEntries] = createStore<Song[]>([]);
   const [selectedSongId, setSelectedSongId] = createSignal(null);
+  const [previewLyrics, setPreviewLyrics] = createStore<Section[]>([]);
 
   onMount(async () => {
     query_all();

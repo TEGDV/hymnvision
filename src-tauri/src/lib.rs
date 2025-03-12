@@ -8,7 +8,7 @@ use surrealdb::Surreal;
 #[tokio::main]
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub async fn run() {
-    let DEBUG = true;
+    let DEBUG = false;
     let db = Surreal::new::<RocksDb>("db").await.unwrap();
     // Select a specific namespace / database
     db.use_ns("database")

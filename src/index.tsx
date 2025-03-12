@@ -15,7 +15,7 @@ render(
       <Route path="/" component={App} />
       <Route path="/songs" component={SongsView} />
       <Route path="/songs/:id" component={SongDetailsView} /> {/* ✅ Dynamic route for viewing a song */}
-      <Route path="/presentation" component={PresentationView} />
+      <Route path="/presentation/:id" component={PresentationView} />
       <Route path="/bible" component={BibleView} />
       <Route path="/configs" component={ConfigsView} />
   </Router>,

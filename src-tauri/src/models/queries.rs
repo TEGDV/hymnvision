@@ -48,7 +48,6 @@ pub async fn search_song(
     let entries = response
         .take(0)
         .expect("Error during desirializing Song Search");
-    dbg!(&entries);
     Ok(entries)
 }
 #[tauri::command]
@@ -89,7 +88,6 @@ pub async fn create_song(db: State<'_, Surreal<Db>>, mut body: Song) -> surreald
         .content(body)
         .await
         .expect("Error to create Entry on DB");
-    dbg!(&_created);
     Ok(())
 }
 
