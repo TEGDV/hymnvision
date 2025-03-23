@@ -10,9 +10,9 @@ import {A} from "@solidjs/router";
 
 function ListComponent() {
   const [showModal, setShowModal] = createSignal(false);
-  const [songEntries, setSongEntries] = createStore<Song[]>([]);
+  const [songEntries, setSongEntries] = createStore<{entries: Song[]}>({entries: []});
   const [selectedSongId, setSelectedSongId] = createSignal(null);
-  const [previewLyrics, setPreviewLyrics] = createStore<Section[]>([]);
+  const [previewLyrics, setPreviewLyrics] = createSignal<Section[]>([]);
 
   onMount(async () => {
     query_all();
@@ -21,7 +21,7 @@ function ListComponent() {
   const query_all = async () => {
     let songs: Song[] = [];
     await invoke("query_all", {}).then((entries) => {
-      setSongEntries(entries)
+      setSongEntries("entries", entries)
       setPreviewLyrics([])
     })
   }
@@ -40,11 +40,11 @@ function ListComponent() {
     let search_string = event.target.value;
     if (search_string === "") {
       await invoke("query_all", {}).then((entries) => {
-        setSongEntries(entries)
+        setSongEntries("entries",entries)
       })
     } else {
       const response = await invoke("search_song", {query: search_string });
-      setSongEntries(response)
+      setSongEntries("entries",response)
     }
   };
 
@@ -59,7 +59,7 @@ function ListComponent() {
       </div>
 
       <div class="grid grid-cols-12 auto-rows-[24px] gap-1 w-full row-span-10 col-span-8 overflow-scroll">
-        <For each={songEntries}>
+        <For each={songEntries.entries}>
           {(song) => <>
             <div class="container-primary grid grid-cols-12 w-full col-span-12 max-h-[32px]" onMouseEnter={() => setPreviewLyrics(song.lyrics)}>
                 <p class="text-sm ctrl h-full w-full truncate overflow-hidden col-span-3">{song.title}</p>

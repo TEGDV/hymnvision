@@ -1,6 +1,6 @@
 @import "tailwindcss";
 :root {
-  @apply bg-neutral-950;
+  @apply bg-gradient-to-bl from-gray-900 to-black;
   font-family: Roboto;
   color: #f6f6f6;
   font-weight: 400;
@@ -80,6 +80,16 @@
   @apply w-6 h-6 text-gray-400 inline-block
 }
 
+.overlay {
+  position: relative;
+  z-index: 1;
+  color: white;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
 
 @theme {
   --animate-dropdown: dropdown 500ms linear;
@@ -96,3 +106,16 @@
     }
   }
 }
+
+.font-rose {
+  font-family: Rose;
+}
+
+.font-techno {
+  font-family: Techno;
+}
+
+.font-roboto {
+  font-family: Roboto;
+}
+

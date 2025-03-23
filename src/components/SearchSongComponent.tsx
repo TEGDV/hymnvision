@@ -52,7 +52,7 @@ function SearchSongComponent(props: {
   }
 
   return (
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
+    <div class="fixed inset-0 flex items-center justify-center bg-opacity-70">
       <div class="container-secondary" onClick={() => setIsOpen(false)}>Close</div>
       <div class="container-primary grid grid-cols-12 auto-rows-[24px] gap-1 w-[800px] max-h-[400px]">
         <input onInput={search_song} class="w-full col-span-8 ctrl container-secondary" type="text" placeholder="Search"/>
